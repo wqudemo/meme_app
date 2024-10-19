@@ -1,9 +1,11 @@
+import os
+
 import diffusers
 import streamlit as st
 import torch
 from PIL import ImageDraw, ImageFont
 
-LORA_WEIGHTS = "onstage3890/maya_model_v1_lora"
+LORA_WEIGHTS = os.environ["LORA_WEIGHTS"]
 
 if torch.cuda.is_available():
     device = "cuda"
@@ -12,6 +14,7 @@ else:
     device = "cpu"
     dtype = torch.float32
 
+@st.cache_resource
 def load_model():
     pipeline = diffusers.AutoPipelineForText2Image.from_pretrained(
         "CompVis/stable-diffusion-v1-4", torch_dtype=dtype
